@@ -1,3 +1,10 @@
+/*
+Broadwater, Geoffrey
+Hewitt, Anthony
+Moglia, David
+Walker, Julia
+All members participated equally
+*/
 package app.controller;
 
 import java.net.URL;
@@ -25,6 +32,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -139,9 +147,10 @@ public class BlackJackController implements Initializable {
 
 		//	Create a new sequential transition
 		SequentialTransition seqDeal = new SequentialTransition();
+		seqDeal.setDelay(new Duration(10));
 
 		//	Add the two parallel transitions to the sequential transition
-		seqDeal.getChildren().addAll(patTMoveRot, patTFadeInFadeOut);
+		seqDeal.getChildren().addAll(patTMoveRot, scaleT, patTFadeInFadeOut);
 
 		//	Set up event handler to remove the animation image after the transition is complete
 		seqDeal.setOnFinished(new EventHandler<ActionEvent>() {
@@ -291,11 +300,14 @@ public class BlackJackController implements Initializable {
 		//TODO: Fix the Path transition.  My Path looks terrible...  do something cool :)
 		
 		path.getElements().add(new MoveTo(fromPoint.getX(), fromPoint.getY()));
-		path.getElements().add(new CubicCurveTo(toPoint.getX() * 2, toPoint.getY() * 2, toPoint.getX() / 3,
-				toPoint.getY() / 3, toPoint.getX(), toPoint.getY()));
-		// path.getElements().add(new CubicCurveTo(0, 120, 0, 240, 380, 240));
+		path.getElements().add(new ArcTo(3,3, 45, toPoint.getX(),
+				toPoint.getY()*1.1, false, true));
+		/*path.getElements().add(new CubicCurveTo(toPoint.getX() * .2, toPoint.getY()*1.5, toPoint.getX() *.6,
+				toPoint.getY()*0.9 , toPoint.getX(), toPoint.getY()*1.1));
+		*/
+		//path.getElements().add(new CubicCurveTo(0, 120, 0, 240, 380, 240));
 		PathTransition pathTransition = new PathTransition();
-		pathTransition.setDuration(Duration.millis(750));
+		pathTransition.setDuration(Duration.millis(2000));
 		pathTransition.setPath(path);
 		pathTransition.setNode(img);
 		pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
@@ -342,7 +354,7 @@ public class BlackJackController implements Initializable {
 
 	private ParallelTransition createFadeTransition(final ImageView imgVFadeOut, final Image imgFadeIn) {
 
-		FadeTransition fadeOutTransition = new FadeTransition(Duration.millis(iAnimationLength), imgVFadeOut);
+		FadeTransition fadeOutTransition = new FadeTransition(Duration.millis(100), imgVFadeOut);
 		fadeOutTransition.setFromValue(1.0);
 		fadeOutTransition.setToValue(0.0);
 		fadeOutTransition.setOnFinished(new EventHandler<ActionEvent>() {
@@ -352,7 +364,7 @@ public class BlackJackController implements Initializable {
 			}
 		});
 
-		FadeTransition fadeInTransition = new FadeTransition(Duration.millis(iAnimationLength), imgVFadeOut);
+		FadeTransition fadeInTransition = new FadeTransition(Duration.millis(100), imgVFadeOut);
 		fadeInTransition.setFromValue(0.0);
 		fadeInTransition.setToValue(1.0);
 		ParallelTransition parallelTransition = new ParallelTransition();
